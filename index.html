@@ -69,40 +69,55 @@ background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(251,191,36,0.
 border: 2px solid rgba(245,158,11,0.4);
 animation: pulse-border 2.5s infinite;
 }
-.ambient-player {
-background: linear-gradient(135deg, rgba(255,87,34,0.1) 0%, rgba(255,152,0,0.05) 100%);
-border: 1px solid rgba(255,87,34,0.3);
+/* ✅ NOUVEAU : Styles pour le lecteur vocal style WhatsApp */
+.voice-player-container {
+background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.05) 100%);
+border: 1px solid rgba(16,185,129,0.3);
 transition: all 0.3s ease;
 }
-.ambient-player:hover { border-color: rgba(255,87,34,0.5); }
-.ambient-progress-bar, .voice-player-bar {
+.voice-player-container:hover { border-color: rgba(16,185,129,0.5); }
+.voice-progress-bar {
 -webkit-appearance: none;
 appearance: none;
-width: 100%;
+flex: 1;
 height: 4px;
 background: #3f3f46;
 border-radius: 2px;
 outline: none;
 cursor: pointer;
 }
-.ambient-progress-bar::-webkit-slider-thumb, .voice-player-bar::-webkit-slider-thumb {
+.voice-progress-bar::-webkit-slider-thumb {
 -webkit-appearance: none;
 appearance: none;
-width: 14px;
-height: 14px;
-background: #ff5722;
+width: 12px;
+height: 12px;
+background: #10b981;
 border-radius: 50%;
 cursor: pointer;
-box-shadow: 0 0 6px rgba(255,87,34,0.5);
+box-shadow: 0 0 4px rgba(16,185,129,0.6);
 }
-.ambient-progress-bar::-moz-range-thumb, .voice-player-bar::-moz-range-thumb {
-width: 14px;
-height: 14px;
-background: #ff5722;
+.voice-progress-bar::-moz-range-thumb {
+width: 12px;
+height: 12px;
+background: #10b981;
 border-radius: 50%;
 cursor: pointer;
 border: none;
-box-shadow: 0 0 6px rgba(255,87,34,0.5);
+box-shadow: 0 0 4px rgba(16,185,129,0.6);
+}
+.voice-wave-bars {
+display: flex;
+align-items: center;
+gap: 2px;
+height: 20px;
+flex: 1;
+}
+.voice-wave-bar {
+flex: 1;
+background: #10b981;
+border-radius: 1px;
+opacity: 0.6;
+transition: height 0.2s ease;
 }
 </style>
 </head>
@@ -504,27 +519,6 @@ box-shadow: 0 0 6px rgba(255,87,34,0.5);
 <i class="fa-solid fa-circle-info mr-1"></i>
 Notre équipe vous répondra dans les 24-48h.
 </div>
-<!-- ✅ NOUVEAU : Lecteur audio d'ambiance -->
-<div class="ambient-player rounded-2xl p-4 space-y-3 mb-4">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
-<i class="fa-solid fa-headphones text-orange-400"></i>
-</div>
-<div class="flex-1 min-w-0">
-<h4 class="text-xs font-bold text-white truncate">Message de bienvenue</h4>
-<p class="text-[10px] text-zinc-400">Écoutez avant de nous contacter</p>
-</div>
-<button onclick="toggleAmbientAudio()" id="btn-ambient-play" class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition" style="background:#ff5722">
-<i class="fa-solid fa-play text-white text-sm" id="ambient-play-icon"></i>
-</button>
-</div>
-<div class="flex items-center gap-2">
-<span class="text-[10px] text-zinc-400 w-8 text-right" id="ambient-current-time">0:00</span>
-<input type="range" id="ambient-progress" class="ambient-progress-bar" min="0" max="100" value="0" oninput="seekAmbientAudio(this.value)">
-<span class="text-[10px] text-zinc-400 w-8" id="ambient-duration">0:00</span>
-</div>
-<audio id="ambient-audio" src="https://raw.githubusercontent.com/zakoyabdoulhafizou959-jpg/mimbar/main/ElevenLabs_2026-06-11T15_43_46_Roger%20-%20Laid-Back%2C%20Casual%2C%20Resonant_pre_sp82_s66_sb75_se0_b_m2.mp3" preload="metadata"></audio>
-</div>
 <div class="bg-zinc-900/90 rounded-2xl p-5 space-y-4 border border-zinc-800">
 <div>
 <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-2">Sujet *</label>
@@ -558,27 +552,20 @@ Notre équipe vous répondra dans les 24-48h.
 <i class="fa-solid fa-circle mr-1"></i><span id="rec-time">00:00</span>
 </div>
 </div>
-<!-- ✅ MODIFIÉ : Aperçu vocal avec vraie barre de progression -->
-<div id="voice-preview" class="hidden mt-2 bg-zinc-800 rounded-xl p-3 border border-emerald-500/20 space-y-2">
+<!-- ✅ MODIFIÉ : Aperçu vocal style WhatsApp avec barre de progression -->
+<div id="voice-preview" class="hidden mt-2 voice-player-container rounded-xl p-3 space-y-2">
 <div class="flex items-center gap-2">
-<div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center shrink-0">
-<i class="fa-solid fa-microphone text-emerald-400 text-xs"></i>
-</div>
-<div class="flex-1 min-w-0">
-<p class="text-[11px] font-bold text-white truncate">Note vocale enregistrée</p>
-<p class="text-[9px] text-zinc-400" id="voice-duration-label">0:00</p>
-</div>
-<button onclick="toggleVoicePlayback()" id="btn-voice-play" class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 transition hover:bg-emerald-600">
+<button onclick="toggleVoicePlayback()" id="btn-voice-play" class="w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 transition hover:bg-emerald-600 shadow-lg">
 <i class="fa-solid fa-play text-white text-xs" id="voice-play-icon"></i>
 </button>
-<button onclick="removeVoice()" class="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center shrink-0 text-zinc-400 hover:text-red-400 transition">
+<div class="flex-1 flex items-center gap-2">
+<span class="text-[10px] text-zinc-400 w-8 text-right tabular-nums" id="voice-current-time">0:00</span>
+<input type="range" id="voice-progress-bar" class="voice-progress-bar" min="0" max="100" value="0" step="0.1" oninput="seekVoiceAudio(this.value)">
+<span class="text-[10px] text-zinc-400 w-8 tabular-nums" id="voice-total-time">0:00</span>
+</div>
+<button onclick="removeVoice()" class="w-8 h-8 rounded-full bg-zinc-700/50 flex items-center justify-center shrink-0 text-zinc-400 hover:text-red-400 hover:bg-red-900/30 transition" title="Supprimer">
 <i class="fa-solid fa-xmark text-xs"></i>
 </button>
-</div>
-<div class="flex items-center gap-2">
-<span class="text-[9px] text-zinc-400 w-8 text-right" id="voice-current-time">0:00</span>
-<input type="range" id="voice-progress-bar" class="voice-player-bar" min="0" max="100" value="0" oninput="seekVoiceAudio(this.value)">
-<span class="text-[9px] text-zinc-400 w-8" id="voice-total-time">0:00</span>
 </div>
 <audio id="voice-audio-player" preload="metadata"></audio>
 </div>
@@ -752,7 +739,6 @@ const bunnyDomain = 'kitabwasunna.b-cdn.net';
 if (originalUrl.includes(b2Domain)) return originalUrl.replace(b2Domain, bunnyDomain);
 return originalUrl;
 }
-// ✅ CORRECTION : saut de ligne remplacé par \n
 function escapeAttr(str) {
 if (!str) return '';
 return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ').replace(/\r/g, '');
@@ -948,7 +934,6 @@ await db.collection('albums').add({
 userId: currentUser.uid, imamName, city, country, type,
 status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp()
 });
-// ✅ CORRECTION : sauts de ligne remplacés par \n
 alert("✅ Demande soumise !\nVotre album est en attente de validation.\nVous pourrez uploader des vidéos une fois l'album approuvé.");
 await loadUserData();
 updateProfileUI();
@@ -1218,7 +1203,6 @@ if (!currentUser || !userAlbum || userAlbum.status !== 'approved') { alert(" Vot
 if (!file.type.startsWith('video/')) { alert("❌ Veuillez sélectionner un fichier vidéo valide (MP4, MOV, WebM, etc.)"); input.value = ''; return; }
 const MAX_SIZE = 2000 * 1024 * 1024;
 if (file.size > MAX_SIZE) {
-// ✅ CORRECTION : sauts de ligne remplacés par \n
 alert(`❌ Fichier trop volumineux !\nTaille maximale autorisée : 2000 Mo (2 Go)\nVotre fichier : ${(file.size / 1024 / 1024).toFixed(1)} Mo`);
 input.value = ''; return;
 }
@@ -1557,7 +1541,6 @@ return `<div class="bg-zinc-900 rounded-xl overflow-hidden border border-zinc-80
 }).join('');
 }
 async function deleteMyVideo(videoId) {
-// ✅ CORRECTION : sauts de ligne remplacés par \n
 if (!confirm("Êtes-vous sûr de vouloir supprimer cette vidéo ?\nVoulez-vous continuer ? (Oui / Non)")) return;
 try {
 await db.collection('videos').doc(videoId).delete();
@@ -1739,7 +1722,6 @@ if (navigator.share) { try { await navigator.share(shareData); } catch (e) { if 
 else { copyToClipboard(shareData); }
 }
 function copyToClipboard(shareData) {
-// ✅ CORRECTION : saut de ligne remplacé par \n
 const text = `${shareData.text}\n${shareData.url}`;
 if (navigator.clipboard) {
 navigator.clipboard.writeText(text).then(() => { alert('✅ Lien copié !'); sendNotification('📨 Invitation', 'Lien copié !'); }).catch(() => fallbackCopy(text));
@@ -1785,7 +1767,7 @@ try {
 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 mediaRecorder = new MediaRecorder(stream); recordingChunks = [];
 mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordingChunks.push(e.data); };
-// ✅ MODIFIÉ : initialisation du lecteur vocal à l'arrêt
+// ✅ MODIFIÉ : initialisation du lecteur vocal à l'arrêt de l'enregistrement
 mediaRecorder.onstop = () => {
 supportVoiceBlob = new Blob(recordingChunks, { type: 'audio/webm' });
 const voiceAudio = safeGetElement('voice-audio-player');
@@ -1797,6 +1779,7 @@ safeRemoveClass('voice-preview', 'hidden');
 safeSetText('btn-record', '<i class="fa-solid fa-microphone mr-1" style="color:#ef4444"></i>Enregistrer');
 safeAddClass('recording-timer', 'hidden');
 clearInterval(recordingInterval); stream.getTracks().forEach(t => t.stop());
+// Réinitialiser le lecteur vocal
 const voicePlayIcon = safeGetElement('voice-play-icon');
 if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-play text-white text-xs';
 const voiceProgressBar = safeGetElement('voice-progress-bar');
@@ -1805,8 +1788,6 @@ const voiceCurrentTime = safeGetElement('voice-current-time');
 if (voiceCurrentTime) voiceCurrentTime.innerText = '0:00';
 const voiceTotalTime = safeGetElement('voice-total-time');
 if (voiceTotalTime) voiceTotalTime.innerText = '0:00';
-const voiceDurationLabel = safeGetElement('voice-duration-label');
-if (voiceDurationLabel) voiceDurationLabel.innerText = 'Chargement...';
 };
 mediaRecorder.start(); recordingStartTime = Date.now();
 safeSetText('btn-record', '<i class="fa-solid fa-stop mr-1" style="color:#ef4444"></i>Arrêter');
@@ -1819,7 +1800,7 @@ safeSetText('rec-time', `${m}:${s}`);
 }, 1000);
 } catch (e) { alert('❌ Microphone : ' + e.message); }
 }
-// ✅ NOUVEAU : Fonctions pour le lecteur vocal
+// ✅ NOUVEAU : Fonctions pour le lecteur vocal style WhatsApp
 function toggleVoicePlayback() {
 const voiceAudio = safeGetElement('voice-audio-player');
 const voicePlayIcon = safeGetElement('voice-play-icon');
@@ -1842,36 +1823,28 @@ function removeVoice() {
 supportVoiceBlob = null;
 safeAddClass('voice-preview', 'hidden');
 const voiceAudio = safeGetElement('voice-audio-player');
-if (voiceAudio) { voiceAudio.pause(); voiceAudio.src = ''; }
+if (voiceAudio) {
+voiceAudio.pause();
+voiceAudio.src = '';
 }
-// ✅ NOUVEAU : Fonctions pour le lecteur audio d'ambiance
-function toggleAmbientAudio() {
-const ambientAudio = safeGetElement('ambient-audio');
-const ambientPlayIcon = safeGetElement('ambient-play-icon');
-if (!ambientAudio) return;
-if (ambientAudio.paused) {
-ambientAudio.play().catch(() => {});
-if (ambientPlayIcon) ambientPlayIcon.className = 'fa-solid fa-pause text-white text-sm';
-} else {
-ambientAudio.pause();
-if (ambientPlayIcon) ambientPlayIcon.className = 'fa-solid fa-play text-white text-sm';
+// Réinitialiser les éléments
+const voicePlayIcon = safeGetElement('voice-play-icon');
+if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-play text-white text-xs';
+const voiceProgressBar = safeGetElement('voice-progress-bar');
+if (voiceProgressBar) voiceProgressBar.value = 0;
+const voiceCurrentTime = safeGetElement('voice-current-time');
+if (voiceCurrentTime) voiceCurrentTime.innerText = '0:00';
+const voiceTotalTime = safeGetElement('voice-total-time');
+if (voiceTotalTime) voiceTotalTime.innerText = '0:00';
 }
-}
-function seekAmbientAudio(value) {
-const ambientAudio = safeGetElement('ambient-audio');
-if (ambientAudio && ambientAudio.duration) {
-ambientAudio.currentTime = (value / 100) * ambientAudio.duration;
-}
-}
+// ✅ NOUVEAU : Initialisation du lecteur vocal (événements)
 function initVoiceAudioPlayer() {
 const voiceAudio = safeGetElement('voice-audio-player');
 if (!voiceAudio) return;
 voiceAudio.addEventListener('loadedmetadata', () => {
 const voiceTotalTime = safeGetElement('voice-total-time');
-const voiceDurationLabel = safeGetElement('voice-duration-label');
 const duration = voiceAudio.duration || 0;
 if (voiceTotalTime) voiceTotalTime.innerText = formatTimeShort(duration);
-if (voiceDurationLabel) voiceDurationLabel.innerText = `Durée : ${formatTimeShort(duration)}`;
 });
 voiceAudio.addEventListener('timeupdate', () => {
 const voiceProgressBar = safeGetElement('voice-progress-bar');
@@ -1889,31 +1862,6 @@ const voiceProgressBar = safeGetElement('voice-progress-bar');
 if (voiceProgressBar) voiceProgressBar.value = 0;
 const voiceCurrentTime = safeGetElement('voice-current-time');
 if (voiceCurrentTime) voiceCurrentTime.innerText = '0:00';
-});
-}
-function initAmbientAudioPlayer() {
-const ambientAudio = safeGetElement('ambient-audio');
-if (!ambientAudio) return;
-ambientAudio.addEventListener('loadedmetadata', () => {
-const ambientDuration = safeGetElement('ambient-duration');
-if (ambientDuration) ambientDuration.innerText = formatTimeShort(ambientAudio.duration || 0);
-});
-ambientAudio.addEventListener('timeupdate', () => {
-const ambientProgress = safeGetElement('ambient-progress');
-const ambientCurrentTime = safeGetElement('ambient-current-time');
-if (ambientAudio.duration) {
-const percent = (ambientAudio.currentTime / ambientAudio.duration) * 100;
-if (ambientProgress) ambientProgress.value = percent;
-if (ambientCurrentTime) ambientCurrentTime.innerText = formatTimeShort(ambientAudio.currentTime);
-}
-});
-ambientAudio.addEventListener('ended', () => {
-const ambientPlayIcon = safeGetElement('ambient-play-icon');
-if (ambientPlayIcon) ambientPlayIcon.className = 'fa-solid fa-play text-white text-sm';
-const ambientProgress = safeGetElement('ambient-progress');
-if (ambientProgress) ambientProgress.value = 0;
-const ambientCurrentTime = safeGetElement('ambient-current-time');
-if (ambientCurrentTime) ambientCurrentTime.innerText = '0:00';
 });
 }
 async function submitSupport() {
@@ -1965,10 +1913,9 @@ xhr.onerror = () => reject(new Error('Erreur réseau')); xhr.timeout = 120000; x
 });
 }
 
-// ✅ NOUVEAU : Initialisation des lecteurs audio au chargement
+// ✅ NOUVEAU : Initialisation du lecteur vocal au chargement
 document.addEventListener('DOMContentLoaded', () => {
 initVoiceAudioPlayer();
-initAmbientAudioPlayer();
 });
 showTab('home');
 </script>
