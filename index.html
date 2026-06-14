@@ -69,55 +69,50 @@ background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(251,191,36,0.
 border: 2px solid rgba(245,158,11,0.4);
 animation: pulse-border 2.5s infinite;
 }
-/* ✅ NOUVEAU : Styles pour le lecteur vocal style WhatsApp */
-.voice-player-container {
-background: linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(16,185,129,0.05) 100%);
-border: 1px solid rgba(16,185,129,0.3);
+.ambient-player {
+background: linear-gradient(135deg, rgba(255,87,34,0.1) 0%, rgba(255,152,0,0.05) 100%);
+border: 1px solid rgba(255,87,34,0.3);
 transition: all 0.3s ease;
 }
-.voice-player-container:hover { border-color: rgba(16,185,129,0.5); }
-.voice-progress-bar {
+.ambient-player:hover { border-color: rgba(255,87,34,0.5); }
+.voice-player-container {
+background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.05) 100%);
+border: 1px solid rgba(16,185,129,0.4);
+transition: all 0.3s ease;
+}
+.voice-player-container:hover { border-color: rgba(16,185,129,0.6); }
+.audio-progress-bar {
 -webkit-appearance: none;
 appearance: none;
-flex: 1;
+width: 100%;
 height: 4px;
 background: #3f3f46;
 border-radius: 2px;
 outline: none;
 cursor: pointer;
 }
-.voice-progress-bar::-webkit-slider-thumb {
+.audio-progress-bar::-webkit-slider-thumb {
 -webkit-appearance: none;
 appearance: none;
-width: 12px;
-height: 12px;
+width: 14px;
+height: 14px;
 background: #10b981;
 border-radius: 50%;
 cursor: pointer;
-box-shadow: 0 0 4px rgba(16,185,129,0.6);
+box-shadow: 0 0 6px rgba(16,185,129,0.6);
+transition: transform 0.1s ease;
 }
-.voice-progress-bar::-moz-range-thumb {
-width: 12px;
-height: 12px;
+.audio-progress-bar::-webkit-slider-thumb:hover {
+transform: scale(1.2);
+}
+.audio-progress-bar::-moz-range-thumb {
+width: 14px;
+height: 14px;
 background: #10b981;
 border-radius: 50%;
 cursor: pointer;
 border: none;
-box-shadow: 0 0 4px rgba(16,185,129,0.6);
-}
-.voice-wave-bars {
-display: flex;
-align-items: center;
-gap: 2px;
-height: 20px;
-flex: 1;
-}
-.voice-wave-bar {
-flex: 1;
-background: #10b981;
-border-radius: 1px;
-opacity: 0.6;
-transition: height 0.2s ease;
+box-shadow: 0 0 6px rgba(16,185,129,0.6);
 }
 </style>
 </head>
@@ -146,7 +141,7 @@ transition: height 0.2s ease;
 </div>
 <div class="popular-section">
 <div class="popular-header">
-<h3 class="popular-title">🔥 Les plus populaires</h3>
+<h3 class="popular-title"> Les plus populaires</h3>
 <span class="view-all-link" onclick="showAllVideos()">Voir tout</span>
 </div>
 <div id="popular-videos-grid" class="grid grid-cols-2 gap-3"></div>
@@ -206,8 +201,8 @@ transition: height 0.2s ease;
 <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1">Type *</label>
 <select id="imamType" class="w-full bg-zinc-800 rounded-lg px-3 py-2 text-xs text-white border border-zinc-700 focus:border-orange-500 focus:outline-none">
 <option value="">-- Choisir --</option>
-<option value="preche">📢 Prêche</option>
-<option value="tafsir"> Tafsir</option>
+<option value="preche"> Prêche</option>
+<option value="tafsir">📖 Tafsir</option>
 <option value="hadith">📜 Hadith</option>
 <option value="coran">🕌 Coran</option>
 </select>
@@ -420,7 +415,7 @@ transition: height 0.2s ease;
 <div class="flex-grow border-t border-zinc-800"></div>
 </div>
 <input type="email" id="loginEmail" placeholder="📧 Email" class="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm text-white border border-zinc-700 focus:border-orange-500 focus:outline-none">
-<input type="password" id="loginPassword" placeholder="🔒 Mot de passe" class="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm text-white border border-zinc-700 focus:border-orange-500 focus:outline-none">
+<input type="password" id="loginPassword" placeholder=" Mot de passe" class="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm text-white border border-zinc-700 focus:border-orange-500 focus:outline-none">
 <button onclick="handleLogin()" id="btn-login" class="w-full py-3 rounded-xl text-sm font-bold text-white transition hover:opacity-90" style="background:#ff5722">Se connecter</button>
 <button onclick="handleSignup()" id="btn-signup" class="w-full py-3 bg-zinc-800 rounded-xl text-sm text-white hover:bg-zinc-700 transition">Créer un compte</button>
 <button onclick="resetPassword()" class="w-full py-2 text-xs text-zinc-400 underline hover:text-orange-400 transition">Mot de passe oublié ?</button>
@@ -519,6 +514,26 @@ transition: height 0.2s ease;
 <i class="fa-solid fa-circle-info mr-1"></i>
 Notre équipe vous répondra dans les 24-48h.
 </div>
+<div class="ambient-player rounded-2xl p-4 space-y-3 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center shrink-0">
+<i class="fa-solid fa-headphones text-orange-400"></i>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-xs font-bold text-white truncate">Message de bienvenue</h4>
+<p class="text-[10px] text-zinc-400">Écoutez avant de nous contacter</p>
+</div>
+<button onclick="toggleAmbientAudio()" id="btn-ambient-play" class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition" style="background:#ff5722">
+<i class="fa-solid fa-play text-white text-sm" id="ambient-play-icon"></i>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] text-zinc-400 w-8 text-right tabular-nums" id="ambient-current-time">0:00</span>
+<input type="range" id="ambient-progress" class="audio-progress-bar" min="0" max="100" value="0" step="0.1" oninput="seekAmbientAudio(this.value)">
+<span class="text-[10px] text-zinc-400 w-8 tabular-nums" id="ambient-duration">0:00</span>
+</div>
+<audio id="ambient-audio" src="https://raw.githubusercontent.com/zakoyabdoulhafizou959-jpg/mimbar/main/ElevenLabs_2026-06-11T15_43_46_Roger%20-%20Laid-Back%2C%20Casual%2C%20Resonant_pre_sp82_s66_sb75_se0_b_m2.mp3" preload="metadata"></audio>
+</div>
 <div class="bg-zinc-900/90 rounded-2xl p-5 space-y-4 border border-zinc-800">
 <div>
 <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-2">Sujet *</label>
@@ -552,15 +567,14 @@ Notre équipe vous répondra dans les 24-48h.
 <i class="fa-solid fa-circle mr-1"></i><span id="rec-time">00:00</span>
 </div>
 </div>
-<!-- ✅ MODIFIÉ : Aperçu vocal style WhatsApp avec barre de progression -->
 <div id="voice-preview" class="hidden mt-2 voice-player-container rounded-xl p-3 space-y-2">
-<div class="flex items-center gap-2">
-<button onclick="toggleVoicePlayback()" id="btn-voice-play" class="w-9 h-9 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 transition hover:bg-emerald-600 shadow-lg">
-<i class="fa-solid fa-play text-white text-xs" id="voice-play-icon"></i>
+<div class="flex items-center gap-3">
+<button onclick="toggleVoicePlayback()" class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 hover:bg-emerald-600 transition shadow-lg">
+<i class="fa-solid fa-play text-white text-sm" id="voice-play-icon"></i>
 </button>
 <div class="flex-1 flex items-center gap-2">
-<span class="text-[10px] text-zinc-400 w-8 text-right tabular-nums" id="voice-current-time">0:00</span>
-<input type="range" id="voice-progress-bar" class="voice-progress-bar" min="0" max="100" value="0" step="0.1" oninput="seekVoiceAudio(this.value)">
+<span class="text-[10px] text-emerald-300 w-8 text-right tabular-nums" id="voice-current-time">0:00</span>
+<input type="range" id="voice-progress-bar" class="audio-progress-bar" min="0" max="100" value="0" step="0.1" oninput="seekVoiceAudio(this.value)">
 <span class="text-[10px] text-zinc-400 w-8 tabular-nums" id="voice-total-time">0:00</span>
 </div>
 <button onclick="removeVoice()" class="w-8 h-8 rounded-full bg-zinc-700/50 flex items-center justify-center shrink-0 text-zinc-400 hover:text-red-400 hover:bg-red-900/30 transition" title="Supprimer">
@@ -741,7 +755,7 @@ return originalUrl;
 }
 function escapeAttr(str) {
 if (!str) return '';
-return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ').replace(/\r/g, '');
+return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, ' ').replace(/\r/g, '');
 }
 function formatDuration(seconds) {
 if (!seconds || isNaN(seconds)) return '00:00';
@@ -751,13 +765,258 @@ const s = Math.floor(seconds % 60);
 if (h > 0) return `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
-// ✅ NOUVEAU : format court pour les lecteurs audio
 function formatTimeShort(seconds) {
 if (!seconds || isNaN(seconds)) return '0:00';
 const m = Math.floor(seconds / 60);
 const s = Math.floor(seconds % 60);
 return `${m}:${s.toString().padStart(2, '0')}`;
 }
+
+// ========== FONCTIONS AUDIO CORRIGÉES ==========
+
+function initVoicePlayer() {
+    const audio = safeGetElement('voice-audio-player');
+    if (!audio) return;
+    
+    audio.addEventListener('loadedmetadata', () => {
+        const totalTime = safeGetElement('voice-total-time');
+        if (totalTime && audio.duration && !isNaN(audio.duration)) {
+            const minutes = Math.floor(audio.duration / 60);
+            const seconds = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+            totalTime.innerText = `${minutes}:${seconds}`;
+        }
+    });
+    
+    audio.addEventListener('timeupdate', () => {
+        const progressBar = safeGetElement('voice-progress-bar');
+        const currentTimeEl = safeGetElement('voice-current-time');
+        
+        if (audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            if (progressBar) {
+                progressBar.value = percent;
+            }
+            if (currentTimeEl) {
+                const currentMinutes = Math.floor(audio.currentTime / 60);
+                const currentSeconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+                currentTimeEl.innerText = `${currentMinutes}:${currentSeconds}`;
+            }
+        }
+    });
+    
+    audio.addEventListener('ended', () => {
+        const icon = safeGetElement('voice-play-icon');
+        if (icon) icon.className = 'fa-solid fa-play text-white text-sm';
+        const progressBar = safeGetElement('voice-progress-bar');
+        if (progressBar) progressBar.value = 0;
+        const currentTimeEl = safeGetElement('voice-current-time');
+        if (currentTimeEl) currentTimeEl.innerText = '0:00';
+    });
+    
+    audio.addEventListener('error', (e) => {
+        console.error('Erreur de lecture audio:', e);
+    });
+}
+
+async function toggleRecording() {
+    if (mediaRecorder && mediaRecorder.state === 'recording') { 
+        mediaRecorder.stop(); 
+        return; 
+    }
+    
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream); 
+        recordingChunks = [];
+        
+        mediaRecorder.ondataavailable = (e) => { 
+            if (e.data.size > 0) recordingChunks.push(e.data); 
+        };
+        
+        mediaRecorder.onstop = () => {
+            supportVoiceBlob = new Blob(recordingChunks, { type: 'audio/webm' });
+            const audio = safeGetElement('voice-audio-player');
+            
+            if (audio) {
+                if (audio.src && audio.src.startsWith('blob:')) {
+                    URL.revokeObjectURL(audio.src);
+                }
+                const audioUrl = URL.createObjectURL(supportVoiceBlob);
+                audio.src = audioUrl;
+                audio.load();
+                
+                const totalTime = safeGetElement('voice-total-time');
+                if (totalTime) totalTime.innerText = '0:00';
+                const currentTime = safeGetElement('voice-current-time');
+                if (currentTime) currentTime.innerText = '0:00';
+                const progressBar = safeGetElement('voice-progress-bar');
+                if (progressBar) progressBar.value = 0;
+            }
+            
+            const preview = safeGetElement('voice-preview');
+            if (preview) preview.classList.remove('hidden');
+            
+            const recordBtn = safeGetElement('btn-record');
+            if (recordBtn) {
+                recordBtn.innerHTML = '<i class="fa-solid fa-microphone mr-1" style="color:#ef4444"></i>Enregistrer';
+            }
+            
+            const timer = safeGetElement('recording-timer');
+            if (timer) timer.classList.add('hidden');
+            
+            clearInterval(recordingInterval);
+            stream.getTracks().forEach(track => track.stop());
+            
+            const playIcon = safeGetElement('voice-play-icon');
+            if (playIcon) playIcon.className = 'fa-solid fa-play text-white text-sm';
+        };
+        
+        mediaRecorder.start();
+        recordingStartTime = Date.now();
+        
+        const recordBtn = safeGetElement('btn-record');
+        if (recordBtn) {
+            recordBtn.innerHTML = '<i class="fa-solid fa-stop mr-1" style="color:#ef4444"></i>Arrêter';
+        }
+        
+        const timer = safeGetElement('recording-timer');
+        if (timer) timer.classList.remove('hidden');
+        
+        recordingInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            const timeEl = safeGetElement('rec-time');
+            if (timeEl) timeEl.innerText = `${minutes}:${seconds}`;
+        }, 1000);
+        
+    } catch (error) { 
+        console.error('Erreur d\'accès au microphone:', error);
+        alert('❌ Impossible d\'accéder au microphone: ' + error.message);
+    }
+}
+
+function toggleVoicePlayback() {
+    const audio = safeGetElement('voice-audio-player');
+    const icon = safeGetElement('voice-play-icon');
+    
+    if (!audio || !audio.src) {
+        console.warn('Aucun audio à lire');
+        return;
+    }
+    
+    if (audio.paused) {
+        audio.play()
+            .then(() => {
+                if (icon) icon.className = 'fa-solid fa-pause text-white text-sm';
+            })
+            .catch(error => {
+                console.error('Erreur de lecture:', error);
+            });
+    } else {
+        audio.pause();
+        if (icon) icon.className = 'fa-solid fa-play text-white text-sm';
+    }
+}
+
+function seekVoiceAudio(value) {
+    const audio = safeGetElement('voice-audio-player');
+    if (audio && audio.duration && !isNaN(audio.duration)) {
+        const seekTime = (value / 100) * audio.duration;
+        audio.currentTime = seekTime;
+        
+        const currentTimeEl = safeGetElement('voice-current-time');
+        if (currentTimeEl) {
+            const minutes = Math.floor(seekTime / 60);
+            const seconds = Math.floor(seekTime % 60).toString().padStart(2, '0');
+            currentTimeEl.innerText = `${minutes}:${seconds}`;
+        }
+    }
+}
+
+function removeVoice() {
+    supportVoiceBlob = null;
+    
+    const preview = safeGetElement('voice-preview');
+    if (preview) preview.classList.add('hidden');
+    
+    const audio = safeGetElement('voice-audio-player');
+    if (audio) {
+        audio.pause();
+        if (audio.src && audio.src.startsWith('blob:')) {
+            URL.revokeObjectURL(audio.src);
+        }
+        audio.src = '';
+        audio.load();
+    }
+    
+    const playIcon = safeGetElement('voice-play-icon');
+    if (playIcon) playIcon.className = 'fa-solid fa-play text-white text-sm';
+    
+    const progressBar = safeGetElement('voice-progress-bar');
+    if (progressBar) progressBar.value = 0;
+    
+    const currentTime = safeGetElement('voice-current-time');
+    if (currentTime) currentTime.innerText = '0:00';
+    
+    const totalTime = safeGetElement('voice-total-time');
+    if (totalTime) totalTime.innerText = '0:00';
+}
+
+function toggleAmbientAudio() {
+const audio = safeGetElement('ambient-audio');
+const icon = safeGetElement('ambient-play-icon');
+if (!audio) return;
+if (audio.paused) {
+audio.play().catch(() => {});
+if (icon) icon.className = 'fa-solid fa-pause text-white text-sm';
+} else {
+audio.pause();
+if (icon) icon.className = 'fa-solid fa-play text-white text-sm';
+}
+}
+function seekAmbientAudio(value) {
+const audio = safeGetElement('ambient-audio');
+if (audio && audio.duration) {
+audio.currentTime = (value / 100) * audio.duration;
+}
+}
+
+function initAmbientAudioPlayer() {
+const audio = safeGetElement('ambient-audio');
+if (!audio) return;
+audio.addEventListener('loadedmetadata', () => {
+const durationEl = safeGetElement('ambient-duration');
+if (durationEl && audio.duration) {
+const m = Math.floor(audio.duration / 60);
+const s = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+durationEl.innerText = `${m}:${s}`;
+}
+});
+audio.addEventListener('timeupdate', () => {
+const progressBar = safeGetElement('ambient-progress');
+const currentTime = safeGetElement('ambient-current-time');
+if (audio.duration) {
+const percent = (audio.currentTime / audio.duration) * 100;
+if (progressBar) progressBar.value = percent;
+if (currentTime) {
+const m = Math.floor(audio.currentTime / 60);
+const s = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+currentTime.innerText = `${m}:${s}`;
+}
+}
+});
+audio.addEventListener('ended', () => {
+const icon = safeGetElement('ambient-play-icon');
+if (icon) icon.className = 'fa-solid fa-play text-white text-sm';
+const progressBar = safeGetElement('ambient-progress');
+if (progressBar) progressBar.value = 0;
+const currentTime = safeGetElement('ambient-current-time');
+if (currentTime) currentTime.innerText = '0:00';
+});
+}
+
+// ========== FIN DES FONCTIONS AUDIO CORRIGÉES ==========
 
 auth.onAuthStateChanged(async (user) => {
 currentUser = user;
@@ -958,7 +1217,7 @@ container.innerHTML = types.map(t => `<button onclick="filterByType(${t.id ? `'$
 function renderAlbumChips() {
 const container = safeGetElement('album-chips'); if (!container) return;
 let filteredAlbums = selectedTypeFilter ? allAlbums.filter(a => a.type === selectedTypeFilter) : allAlbums;
-const chips = [{ id: null, name: '👥 Tous' }, ...filteredAlbums.map(a => ({ id: a.id, name: a.imamName || 'Album' }))];
+const chips = [{ id: null, name: ' Tous' }, ...filteredAlbums.map(a => ({ id: a.id, name: a.imamName || 'Album' }))];
 container.innerHTML = chips.map(c => `<button onclick="filterByAlbum(${c.id ? `'${c.id}'` : 'null'})" class="shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold whitespace-nowrap ${selectedAlbumFilter === c.id ? 'text-white' : 'bg-zinc-800 text-zinc-400'}" ${selectedAlbumFilter === c.id ? 'style="background:#ff5722"' : ''}>${escapeAttr(c.name)}</button>`).join('');
 }
 function getFilteredVideos() {
@@ -1198,7 +1457,6 @@ return `il y a ${Math.floor(seconds / 86400)} jour(s)`;
 function handleFileSelected(input) {
 if (!input.files?.length) { console.error('❌ Aucun fichier sélectionné'); return; }
 const file = input.files[0];
-console.log(' Fichier sélectionné:', file.name, '| Taille:', (file.size / 1024 / 1024).toFixed(2), 'Mo');
 if (!currentUser || !userAlbum || userAlbum.status !== 'approved') { alert(" Votre album doit être approuvé par l'administrateur avant de pouvoir uploader des vidéos."); input.value = ''; return; }
 if (!file.type.startsWith('video/')) { alert("❌ Veuillez sélectionner un fichier vidéo valide (MP4, MOV, WebM, etc.)"); input.value = ''; return; }
 const MAX_SIZE = 2000 * 1024 * 1024;
@@ -1213,7 +1471,6 @@ safeSetText('selected-file-size', `(${(file.size / 1024 / 1024).toFixed(1)} Mo)`
 const titleInput = safeGetElement('videoTitle');
 if (titleInput) titleInput.value = file.name.replace(/\.[^/.]+$/, "");
 safeRemoveClass('upload-form', 'hidden');
-console.log('✅ Fichier prêt pour l\'upload:', file.name, '| Taille:', (file.size / 1024 / 1024).toFixed(2), 'Mo');
 } catch (error) { console.error('❌ Erreur sélection fichier:', error); alert('❌ Erreur : ' + error.message); input.value = ''; }
 }
 function cancelFileSelection() {
@@ -1303,7 +1560,7 @@ const titleInput = safeGetElement('videoTitle'); if (titleInput) titleInput.valu
 const typeSelect = safeGetElement('videoType'); if (typeSelect) typeSelect.value = interruptedUploadData.videoType;
 try {
 await uploadChunks(interruptedUploadData.fileName, currentFileBlob, interruptedUploadData.fileId, interruptedUploadData.authorizationToken, interruptedUploadData.currentChunk, interruptedUploadData.totalChunks, interruptedUploadData.partShas || [], interruptedUploadData.title, interruptedUploadData.videoType, interruptedUploadData.thumbnail, interruptedUploadData.duration);
-} catch (error) { alert('❌ Erreur: ' + error.message); isResumingUpload = false; }
+} catch (error) { alert(' Erreur: ' + error.message); isResumingUpload = false; }
 }
 function cancelInterruptedUpload() {
 if (confirm('Annuler définitivement cet upload ?')) {
@@ -1691,7 +1948,7 @@ if (!('Notification' in window)) { alert(" Notifications non supportées"); retu
 if (Notification.permission === 'granted') { sendNotification('🔔 Test', 'Les notifications fonctionnent !'); return; }
 if (Notification.permission === 'denied') { alert("❌ Notifications bloquées."); return; }
 const permission = await Notification.requestPermission();
-if (permission === 'granted') { sendNotification('🔔 Notifications activées !', 'Vous recevrez des notifications.'); updateProfileUI(); }
+if (permission === 'granted') { sendNotification(' Notifications activées !', 'Vous recevrez des notifications.'); updateProfileUI(); }
 }
 function sendNotification(title, body) {
 if (!('Notification' in window) || Notification.permission !== 'granted') return;
@@ -1761,109 +2018,7 @@ preview.appendChild(div);
 reader.readAsDataURL(img);
 });
 }
-async function toggleRecording() {
-if (mediaRecorder && mediaRecorder.state === 'recording') { mediaRecorder.stop(); return; }
-try {
-const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-mediaRecorder = new MediaRecorder(stream); recordingChunks = [];
-mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordingChunks.push(e.data); };
-// ✅ MODIFIÉ : initialisation du lecteur vocal à l'arrêt de l'enregistrement
-mediaRecorder.onstop = () => {
-supportVoiceBlob = new Blob(recordingChunks, { type: 'audio/webm' });
-const voiceAudio = safeGetElement('voice-audio-player');
-if (voiceAudio) {
-voiceAudio.src = URL.createObjectURL(supportVoiceBlob);
-voiceAudio.load();
-}
-safeRemoveClass('voice-preview', 'hidden');
-safeSetText('btn-record', '<i class="fa-solid fa-microphone mr-1" style="color:#ef4444"></i>Enregistrer');
-safeAddClass('recording-timer', 'hidden');
-clearInterval(recordingInterval); stream.getTracks().forEach(t => t.stop());
-// Réinitialiser le lecteur vocal
-const voicePlayIcon = safeGetElement('voice-play-icon');
-if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-play text-white text-xs';
-const voiceProgressBar = safeGetElement('voice-progress-bar');
-if (voiceProgressBar) voiceProgressBar.value = 0;
-const voiceCurrentTime = safeGetElement('voice-current-time');
-if (voiceCurrentTime) voiceCurrentTime.innerText = '0:00';
-const voiceTotalTime = safeGetElement('voice-total-time');
-if (voiceTotalTime) voiceTotalTime.innerText = '0:00';
-};
-mediaRecorder.start(); recordingStartTime = Date.now();
-safeSetText('btn-record', '<i class="fa-solid fa-stop mr-1" style="color:#ef4444"></i>Arrêter');
-safeRemoveClass('recording-timer', 'hidden');
-recordingInterval = setInterval(() => {
-const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
-const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
-const s = (elapsed % 60).toString().padStart(2, '0');
-safeSetText('rec-time', `${m}:${s}`);
-}, 1000);
-} catch (e) { alert('❌ Microphone : ' + e.message); }
-}
-// ✅ NOUVEAU : Fonctions pour le lecteur vocal style WhatsApp
-function toggleVoicePlayback() {
-const voiceAudio = safeGetElement('voice-audio-player');
-const voicePlayIcon = safeGetElement('voice-play-icon');
-if (!voiceAudio) return;
-if (voiceAudio.paused) {
-voiceAudio.play().catch(() => {});
-if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-pause text-white text-xs';
-} else {
-voiceAudio.pause();
-if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-play text-white text-xs';
-}
-}
-function seekVoiceAudio(value) {
-const voiceAudio = safeGetElement('voice-audio-player');
-if (voiceAudio && voiceAudio.duration) {
-voiceAudio.currentTime = (value / 100) * voiceAudio.duration;
-}
-}
-function removeVoice() {
-supportVoiceBlob = null;
-safeAddClass('voice-preview', 'hidden');
-const voiceAudio = safeGetElement('voice-audio-player');
-if (voiceAudio) {
-voiceAudio.pause();
-voiceAudio.src = '';
-}
-// Réinitialiser les éléments
-const voicePlayIcon = safeGetElement('voice-play-icon');
-if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-play text-white text-xs';
-const voiceProgressBar = safeGetElement('voice-progress-bar');
-if (voiceProgressBar) voiceProgressBar.value = 0;
-const voiceCurrentTime = safeGetElement('voice-current-time');
-if (voiceCurrentTime) voiceCurrentTime.innerText = '0:00';
-const voiceTotalTime = safeGetElement('voice-total-time');
-if (voiceTotalTime) voiceTotalTime.innerText = '0:00';
-}
-// ✅ NOUVEAU : Initialisation du lecteur vocal (événements)
-function initVoiceAudioPlayer() {
-const voiceAudio = safeGetElement('voice-audio-player');
-if (!voiceAudio) return;
-voiceAudio.addEventListener('loadedmetadata', () => {
-const voiceTotalTime = safeGetElement('voice-total-time');
-const duration = voiceAudio.duration || 0;
-if (voiceTotalTime) voiceTotalTime.innerText = formatTimeShort(duration);
-});
-voiceAudio.addEventListener('timeupdate', () => {
-const voiceProgressBar = safeGetElement('voice-progress-bar');
-const voiceCurrentTime = safeGetElement('voice-current-time');
-if (voiceAudio.duration) {
-const percent = (voiceAudio.currentTime / voiceAudio.duration) * 100;
-if (voiceProgressBar) voiceProgressBar.value = percent;
-if (voiceCurrentTime) voiceCurrentTime.innerText = formatTimeShort(voiceAudio.currentTime);
-}
-});
-voiceAudio.addEventListener('ended', () => {
-const voicePlayIcon = safeGetElement('voice-play-icon');
-if (voicePlayIcon) voicePlayIcon.className = 'fa-solid fa-play text-white text-xs';
-const voiceProgressBar = safeGetElement('voice-progress-bar');
-if (voiceProgressBar) voiceProgressBar.value = 0;
-const voiceCurrentTime = safeGetElement('voice-current-time');
-if (voiceCurrentTime) voiceCurrentTime.innerText = '0:00';
-});
-}
+
 async function submitSupport() {
 if (!currentUser) { alert("Connectez-vous"); return; }
 const subject = safeGetElement('supportSubject').value;
@@ -1913,9 +2068,9 @@ xhr.onerror = () => reject(new Error('Erreur réseau')); xhr.timeout = 120000; x
 });
 }
 
-// ✅ NOUVEAU : Initialisation du lecteur vocal au chargement
 document.addEventListener('DOMContentLoaded', () => {
-initVoiceAudioPlayer();
+initVoicePlayer();
+initAmbientAudioPlayer();
 });
 showTab('home');
 </script>
