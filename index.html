@@ -746,12 +746,9 @@ function safeRemoveClass(id, className) { const el = safeGetElement(id); if (el)
 function safeSetText(id, text) { const el = safeGetElement(id); if (el) el.innerText = text; }
 function safeSetHTML(id, html) { const el = safeGetElement(id); if (el) el.innerHTML = html; }
 function getCdnUrl(originalUrl) {
-if (!originalUrl) return '';
-if (originalUrl.includes('kitabwasunna.b-cdn.net')) return originalUrl;
-const b2Domain = 'f005.backblazeb2.com';
-const bunnyDomain = 'kitabwasunna.b-cdn.net';
-if (originalUrl.includes(b2Domain)) return originalUrl.replace(b2Domain, bunnyDomain);
-return originalUrl;
+    if (!originalUrl) return '';
+    // Retourne l'URL directe de Backblaze B2 sans passer par le CDN
+    return originalUrl;
 }
 function escapeAttr(str) {
 if (!str) return '';
@@ -1657,7 +1654,7 @@ title, speaker: userAlbum.imamName || currentUser.email?.split('@')[0],
 duration, date: new Date().toISOString().split('T')[0],
 views: 0, downloads: 0, downloadURL: finalVideoUrl,
 thumbnail, uploadedAt: new Date(), size: fileBlob.size,
-storage: 'backblaze_b2', cdn: 'bunny_net', videoType, uploadMethod: 'chunked'
+storage: 'backblaze_b2', videoType, uploadMethod: 'chunked'
 });
 clearUploadProgress();
 if (progressBar) progressBar.style.width = '100%';
@@ -1749,7 +1746,7 @@ title, speaker: userAlbum.imamName || currentUser.email?.split('@')[0],
 duration, date: new Date().toISOString().split('T')[0],
 views: 0, downloads: 0, downloadURL: finalVideoUrl,
 thumbnail, uploadedAt: new Date(), size: fileBlob.size,
-storage: 'backblaze_b2', cdn: 'bunny_net', videoType, uploadMethod: 'simple'
+storage: 'backblaze_b2', videoType, uploadMethod: 'simple'
 });
 if (progressBar) progressBar.style.width = '100%';
 if (progressPercent) progressPercent.innerText = '100%';
